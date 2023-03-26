@@ -12,10 +12,11 @@ var(chatrules) config bool PSayThruGameRules; // let psay be proccess by gamerul
 function PostBeginPlay()
 {
     //log("chatrules start"); // testing
-   	if( Level.Game.GameRules==None )
+   	if( Level.Game.GameRules==None ) {
 		Level.Game.GameRules = Self;
-	else 
+	} else { 
 		Level.Game.GameRules.AddRules(Self);
+	}
 }
 
 function BeginPlay()
