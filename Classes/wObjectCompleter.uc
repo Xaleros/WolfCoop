@@ -26,7 +26,7 @@ var config array<string> prohibitedPackageNames;
 
 function PostBeginPlay()
 {
-	log("start obj");
+	//log("start obj");
 	BuildsUToList();
 }
 
