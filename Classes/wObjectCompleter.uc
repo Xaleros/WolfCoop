@@ -2,12 +2,10 @@
 // wObjectCompleter
 //=============================================================================
 class wObjectCompleter extends Actor config(WolfCoop);
-
-// ----------------------------------------------------
 // usage - spawn this somhow and link it.
 // call function string ReturnMatchingFile(string objectname) to return the file a object is from.
-//
-// or
+
+// or blindly:
 // this.ExecFunctionStr(stringtoname("ReturnMatchingFileBlind"),"objecttofind");
 // then read  
 // this.output_file or this.GetPropertyText("output_file"));
@@ -17,12 +15,12 @@ Struct actor_list
 	var() string objpack, objclass;
 };
 
-var () array<actor_list> avalibleobjectsarray;
-var () array<string> files_array;
+var() array<actor_list> avalibleobjectsarray;
+var() array<string> files_array;
 var int current_block,total_block,files_total,classes_total;
 var string output_file; // you can use getproperty/class.output_file to read this, without linking it.
 
-var config array<string> prohibitedPackageNames;
+var() config array<string> prohibitedPackageNames;
 
 function PostBeginPlay()
 {
@@ -189,4 +187,8 @@ defaultproperties
 	prohibitedPackageNames[5]="NEPHTHYS"
 	prohibitedPackageNames[6]="PATHLOGIC"
 	prohibitedPackageNames[7]="GlitchReal"
-}
+        prohibitedPackageNames[8]="voipmod"
+        prohibitedPackageNames[9]="UnrealKismet"
+        prohibitedPackageNames[10]="IpDrv"
+        prohibitedPackageNames[11]="MapBuilder"
+        prohibitedPackageNames[12]="ssf"
