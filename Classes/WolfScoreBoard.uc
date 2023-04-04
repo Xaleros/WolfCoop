@@ -9,6 +9,7 @@ var byte bAFKs[16],bVoteEnds[16],bInvaders[16],bSpecs[16],bTypings[16];
 function DrawHeader( canvas Canvas )
 {
 	local int Holiday;
+	local float XL, YL;
 
 	Canvas.Font=Font'u96f_tech';
 
@@ -210,15 +211,11 @@ function ShowScores(canvas Canvas)
 
 	Canvas.SetPos(Canvas.ClipX/5*1.25, Canvas.ClipY/4.5 -16);
 	if(wPRI(Pawn(Owner).PlayerReplicationInfo).bInvader)
-	{
-		Canvas.DrawColor.G=0; Canvas.DrawColor.R=255;
-		Canvas.DrawText("Your Target: "$wPRI(Pawn(Owner).PlayerReplicationInfo).InvadeTarget,false);
-	}
+	{Canvas.DrawColor.G=0; Canvas.DrawColor.R=255;
+	Canvas.DrawText("Your Target: "$wPRI(Pawn(Owner).PlayerReplicationInfo).InvadeTarget,false);}
 	else
-	{
-		Canvas.DrawColor.G=0; Canvas.DrawColor.G=255;
-		Canvas.DrawText("Total Score: "$wPRI(Pawn(Owner).PlayerReplicationInfo).TotalScore,false);
-	}
+	{Canvas.DrawColor.G=0; Canvas.DrawColor.G=255;
+	Canvas.DrawText("Total Score: "$wPRI(Pawn(Owner).PlayerReplicationInfo).TotalScore,false);}
 
 	Canvas.DrawColor.R=255;
 	Canvas.DrawColor.G=255;
@@ -233,9 +230,9 @@ function ShowScores(canvas Canvas)
 	{
 		Canvas.SetPos(Canvas.ClipX/5 * 3, Canvas.ClipY/4 -16);
 		if(wPRI(Pawn(Owner).PlayerReplicationInfo).MaxLives>1)
-			Canvas.DrawText("LIVES", false);
+		Canvas.DrawText("LIVES", false);
 		else
-			Canvas.DrawText("STATUS", false);
+		Canvas.DrawText("STATUS", false);
 	}
 
 	Canvas.SetPos(Canvas.ClipX/5 * 3.5, Canvas.ClipY/4 -16);
@@ -258,15 +255,11 @@ function ShowScores(canvas Canvas)
 		// Player ID
 		DrawIDs(Canvas, I, 0, LoopCount);
 		// Player Endvotes
-		if(bSpecs[I]!=1 && bInvaders[I]!=1) 
-			DrawEndVotes(Canvas, I, 0, LoopCount);
-
+		if(bSpecs[I]!=1 && bInvaders[I]!=1) DrawEndVotes(Canvas, I, 0, LoopCount);
 		// Player Lives
 		DrawLives(Canvas, I, 0, LoopCount);
-
 		// Player Score
-		if(bSpecs[I]!=1) 
-			DrawScore(Canvas, I, 0, LoopCount);
+		if(bSpecs[I]!=1) DrawScore(Canvas, I, 0, LoopCount);
 
 		LoopCount++;
 	}
@@ -285,34 +278,19 @@ function DrawName(canvas Canvas, int I, float XOffset, int LoopCount)
 	if (Canvas.ClipX >= 640) Step = 16;
 	else Step = 8;
 	
-	if(bSpecs[I]==1) 
-	{ 
-		Canvas.DrawColor.R = 255; 
-		Canvas.DrawColor.G = 255; 
-		Canvas.DrawColor.B = 255; 
-	}
-	else if(bInvaders[I]>=1) 
-	{ 
-		Canvas.DrawColor.R = 255; 
-		Canvas.DrawColor.G = 16; 
-		Canvas.DrawColor.B = 16; 
-	}
-	else 
-	{ 
-		Canvas.DrawColor.R = 16; 	
-		Canvas.DrawColor.G = 255; 
-		Canvas.DrawColor.B = 16; 
-	}
+	if(bSpecs[I]==1) 		{ Canvas.DrawColor.R = 255; Canvas.DrawColor.G = 255; Canvas.DrawColor.B = 255; }
+	else if(bInvaders[I]>=1) 	{ Canvas.DrawColor.R = 255; Canvas.DrawColor.G = 16; Canvas.DrawColor.B = 16; }
+	else					{ Canvas.DrawColor.R = 16; 	Canvas.DrawColor.G = 255; Canvas.DrawColor.B = 16; }
 
 	Canvas.StrLen(PlayerNames[I],XL,YL);
 
 	Canvas.SetPos(Canvas.ClipX/5*1.25, Canvas.ClipY/4 + (LoopCount * Step));
 	if(bTypings[I]>0)
-		Canvas.DrawText(PlayerNames[I]@"(Typing)", false);
+	Canvas.DrawText(PlayerNames[I]@"(Typing)", false);
 	else if(bAFKs[I]>0)
-		Canvas.DrawText(PlayerNames[I]@"(AFK)", false);
+	Canvas.DrawText(PlayerNames[I]@"(AFK)", false);
 	else
-		Canvas.DrawText(PlayerNames[I], false);
+	Canvas.DrawText(PlayerNames[I], false);
 
 	Canvas.DrawColor.R = 0;
 	Canvas.DrawColor.G = 255;
@@ -323,10 +301,8 @@ function DrawEndVotes(canvas Canvas, int I, float XOffset, int LoopCount)
 {
 	local int Step;
 	
-	if (Canvas.ClipX >= 640) 
-		Step = 16;
-	else 
-		Step = 8;
+	if (Canvas.ClipX >= 640) Step = 16;
+	else Step = 8;
 	
 	//if(PLevels[I]>0) { Canvas.DrawColor=PColors[I]; }
 	//else { Canvas.DrawColor.R = 0; Canvas.DrawColor.G = 255; Canvas.DrawColor.B = 0; }
@@ -336,10 +312,8 @@ function DrawEndVotes(canvas Canvas, int I, float XOffset, int LoopCount)
 	Canvas.SetPos(Canvas.ClipX/5*2.65, Canvas.ClipY/4 + (LoopCount * Step));
 	if(bVoteEnds[I]==1)
 	{
-		if(Level.Pauser!="") 
-			Canvas.DrawText("[START]", false);
-		else 
-			Canvas.DrawText("[END]", false);
+		if(Level.Pauser!="") Canvas.DrawText("[START]", false);
+		else Canvas.DrawText("[END]", false);
 	}
 
 	Canvas.DrawColor.R = 0;
@@ -351,6 +325,7 @@ function DrawEndVotes(canvas Canvas, int I, float XOffset, int LoopCount)
 function DrawLives( canvas Canvas, int I, float XOffset, int LoopCount )
 {
 	local int Step;
+	local float Health;
 
 	Canvas.DrawColor.R = 0;
 	Canvas.DrawColor.G = 255;
@@ -472,7 +447,7 @@ function Swap( int L, int R )
 	local float TempScore;
 	local byte TempTeam, TempEnd, TempInvaders;
 	local int TempPing, TempSpec, TempIDs,TempLives;
-	local byte TempbAFKs,TempTypings;
+	local byte TempbAFKs,TempbLastStands,TempTypings;
 
 	
 	TempPlayerName = PlayerNames[L];
@@ -517,132 +492,4 @@ function Swap( int L, int R )
 
 defaultproperties
 {
-	Lives(0)=0
-	Lives(1)=0
-	Lives(2)=0
-	Lives(3)=0
-	Lives(4)=0
-	Lives(5)=0
-	Lives(6)=0
-	Lives(7)=0
-	Lives(8)=0
-	Lives(9)=0
-	Lives(10)=0
-	Lives(11)=0
-	Lives(12)=0
-	Lives(13)=0
-	Lives(14)=0
-	Lives(15)=0
-	Healths(0)=0
-	Healths(1)=0
-	Healths(2)=0
-	Healths(3)=0
-	Healths(4)=0
-	Healths(5)=0
-	Healths(6)=0
-	Healths(7)=0
-	Healths(8)=0
-	Healths(9)=0
-	Healths(10)=0
-	Healths(11)=0
-	Healths(12)=0
-	Healths(13)=0
-	Healths(14)=0
-	Healths(15)=0
-	IDs(0)=0
-	IDs(1)=0
-	IDs(2)=0
-	IDs(3)=0
-	IDs(4)=0
-	IDs(5)=0
-	IDs(6)=0
-	IDs(7)=0
-	IDs(8)=0
-	IDs(9)=0
-	IDs(10)=0
-	IDs(11)=0
-	IDs(12)=0
-	IDs(13)=0
-	IDs(14)=0
-	IDs(15)=0
-	bAFKs(0)=0
-	bAFKs(1)=0
-	bAFKs(2)=0
-	bAFKs(3)=0
-	bAFKs(4)=0
-	bAFKs(5)=0
-	bAFKs(6)=0
-	bAFKs(7)=0
-	bAFKs(8)=0
-	bAFKs(9)=0
-	bAFKs(10)=0
-	bAFKs(11)=0
-	bAFKs(12)=0
-	bAFKs(13)=0
-	bAFKs(14)=0
-	bAFKs(15)=0
-	bVoteEnds(0)=0
-	bVoteEnds(1)=0
-	bVoteEnds(2)=0
-	bVoteEnds(3)=0
-	bVoteEnds(4)=0
-	bVoteEnds(5)=0
-	bVoteEnds(6)=0
-	bVoteEnds(7)=0
-	bVoteEnds(8)=0
-	bVoteEnds(9)=0
-	bVoteEnds(10)=0
-	bVoteEnds(11)=0
-	bVoteEnds(12)=0
-	bVoteEnds(13)=0
-	bVoteEnds(14)=0
-	bVoteEnds(15)=0
-	bInvaders(0)=0
-	bInvaders(1)=0
-	bInvaders(2)=0
-	bInvaders(3)=0
-	bInvaders(4)=0
-	bInvaders(5)=0
-	bInvaders(6)=0
-	bInvaders(7)=0
-	bInvaders(8)=0
-	bInvaders(9)=0
-	bInvaders(10)=0
-	bInvaders(11)=0
-	bInvaders(12)=0
-	bInvaders(13)=0
-	bInvaders(14)=0
-	bInvaders(15)=0
-	bSpecs(0)=0
-	bSpecs(1)=0
-	bSpecs(2)=0
-	bSpecs(3)=0
-	bSpecs(4)=0
-	bSpecs(5)=0
-	bSpecs(6)=0
-	bSpecs(7)=0
-	bSpecs(8)=0
-	bSpecs(9)=0
-	bSpecs(10)=0
-	bSpecs(11)=0
-	bSpecs(12)=0
-	bSpecs(13)=0
-	bSpecs(14)=0
-	bSpecs(15)=0
-	bTypings(0)=0
-	bTypings(1)=0
-	bTypings(2)=0
-	bTypings(3)=0
-	bTypings(4)=0
-	bTypings(5)=0
-	bTypings(6)=0
-	bTypings(7)=0
-	bTypings(8)=0
-	bTypings(9)=0
-	bTypings(10)=0
-	bTypings(11)=0
-	bTypings(12)=0
-	bTypings(13)=0
-	bTypings(14)=0
-	bTypings(15)=0
 }

@@ -8,7 +8,7 @@ auto state Enabled
 {
 	function Touch( Actor Other )
 	{
-		//local inventory Inv;
+		local inventory Inv;
 		local Pawn P;
 		local GameRules GR;
 

@@ -34,7 +34,7 @@ function CheckScoreBoardInfo()
 	local wPRI PRI;
 
 	if(PlayerID<=0)
-		PlayerID=Level.Game.CurrentID;
+	PlayerID=Level.Game.CurrentID;
 
 	foreach allactors(class'wPRI',PRI)
 	{
@@ -43,32 +43,23 @@ function CheckScoreBoardInfo()
 	}
 	
 	ID=PlayerID;
-	if(Team<0||Team>3) 
-		Team=1;
+	if(Team<0||Team>3) Team=1;
 
-    if(WolfCoopGame(Level.Game)!=None)
-	{ 
-		// can happen if a installed wplayerpawn is seleleted in playeroptions.
-		EndTimer=WolfCoopGame(Level.Game).EndTimeCount;
-		Holiday=WolfCoopGame(Level.Game).HolidayNum;
-		TotalScore=WolfCoopGame(Level.Game).TotalScore;
-		bEnableLives=WolfCoopGame(Level.Game).bEnableLives;
-		MaxLives=WolfCoopGame(Level.Game).MaxLives;
-    }
+	EndTimer=WolfCoopGame(Level.Game).EndTimeCount;
+	Holiday=WolfCoopGame(Level.Game).HolidayNum;
+	TotalScore=WolfCoopGame(Level.Game).TotalScore;
+	bEnableLives=WolfCoopGame(Level.Game).bEnableLives;
+	MaxLives=WolfCoopGame(Level.Game).MaxLives;
 
 	if(wPlayer(Owner)==None)
 		return;
 
-	if(WolfCoopGame(Level.Game).bSaveScores && WolfCoopGame(Level.Game)!=None)
+	if(WolfCoopGame(Level.Game).bSaveScores)
 	{
 		if(!bLoadScore && Score==0)
-		{
-			Score=wPlayer(Owner).Score; 
-			if(Score!=0) 
-			bLoadScore=True;
-		}
+		{Score=wPlayer(Owner).Score; if(Score!=0) bLoadScore=True;}
 		else
-			wPlayer(Owner).Score=Score;
+		wPlayer(Owner).Score=Score;
 	}
 
 	bIsTyping=wPlayer(Owner).RepTyping;
@@ -87,23 +78,4 @@ function Timer()
 
 defaultproperties
 {
-	AdminLevel=0
-	Lives=0
-	EndTimer=0
-	Health=0
-	Id=0
-	TotalScore=0
-	MaxLives=0
-	Holiday=0
-	InvadeTarget=""
-	VotedURL=""
-	bVoteEnd=False
-	bForcedAFK=False
-	bInvader=False
-	bAFK=False
-	bGameOver=False
-	bEnableLives=False
-	bNeutralMap=False
-	bLoadScore=False
-	bIsTyping=False
 }

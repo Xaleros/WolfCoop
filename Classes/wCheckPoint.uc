@@ -55,20 +55,18 @@ simulated function Touch(Actor Other)
 		TriggerEvent(Event,Other,Other.Instigator);
 		SetCollision(false,false,false);
 		PlayerPawn(Other).PlayerReplicationInfo.Score+=ScoreAmount;
-		
 		if(bExtraLife)
-			BroadcastMessage("Checkpoint Reached: Extra Life!",True,'CriticalEvent');
+		BroadcastMessage("Checkpoint Reached: Extra Life!",True,'CriticalEvent');
 		else if(bRevive)
-			BroadcastMessage("Checkpoint Reached: Dead Players Revived!",True,'CriticalEvent');
+		BroadcastMessage("Checkpoint Reached: Dead Players Revived!",True,'CriticalEvent');
 		else
-			BroadcastMessage("Checkpoint Reached!",True,'CriticalEvent');
-
+		BroadcastMessage("Checkpoint Reached!",True,'CriticalEvent');
 		Spawn(Class'ParticleBurst');
 		NewPlayerStart();
 		if(WolfCoopGame(Level.Game).bCheckpointHeals)
 		{
 			if(Pawn(Other).Health<Pawn(Other).Default.Health)
-				Pawn(Other).Health=Pawn(Other).Default.Health;
+			Pawn(Other).Health=Pawn(Other).Default.Health;
 		}
 		if(WolfCoopGame(Level.Game).bAllowCheckpointRelocate)
 		{
@@ -91,42 +89,36 @@ simulated function NewPlayerStart()
 	local PlayerStart Start,NewStart;
 
 	if(WolfCoopGame(Level.Game).bEnableLives && (bExtraLife || bRevive))
-	{	
-		foreach allactors(class'wPlayer',P)
+	{	foreach allactors(class'wPlayer',P)
 		{
 			if(bExtraLife)
 			{
 				if(WolfCoopGame(Level.Game).bSeriousSamExtraLife)
-					P.ClientPlaySound(Sound'SeriousSamExtraLife');
+				P.ClientPlaySound(Sound'SeriousSamExtraLife');
 				else if(WolfCoopGame(Level.Game).bMarioSounds || WolfCoopGame(Level.Game).HolidayNum==3)
-					P.ClientPlaySound(Sound'MarioExtraLife');
+				P.ClientPlaySound(Sound'MarioExtraLife');
 				else
-					P.ClientPlaySound(Sound'ExtraLife');
+				P.ClientPlaySound(Sound'ExtraLife');
 			}
 			else
-				P.ClientPlaySound(Sound'RevivedNotif');
-
-			if (P.Health<=0 && P.Lives<=0 && (bExtraLife || bRevive))
+			P.ClientPlaySound(Sound'RevivedNotif');
+			if(P.Health<=0 && P.Lives<=0 && (bExtraLife || bRevive))
 			{
 				P.ServerReStartPlayer();
 				P.SetLocation(Location);
 				P.SetRotation(Rotation);
 				P.ViewTarget=None;
 			}
-			else if (bExtraLife) 
-			{
-				if(P.Lives<WolfCoopGame(Level.Game).MaxLives)
-					P.Lives++;
-			}
+			else if (bExtraLife) if(P.Lives<WolfCoopGame(Level.Game).MaxLives) P.Lives++;
 		}
 	}
 
 	ForEach allactors(class 'PlayerStart', Start)
 	{
 		if(Start.IsA('wPlayerStart'))
-			Start.Destroy();
+		Start.Destroy();
 		else
-			Start.bEnabled=False;
+		Start.bEnabled=False;
 	}
 
 	NewStart = Spawn(class'wPlayerStart',,,location,rotation);
@@ -134,28 +126,25 @@ simulated function NewPlayerStart()
 
 defaultproperties
 {
-	ScoreAmount=150
-	CPLight=None
-	bEnabled=True
-	bRevive=False
-	bExtraLife=False
-	LifeSpan=99999.0
-	DrawScale=0.5
-	ScaleGlow=2.0
-	Texture=WetTexture'SpaceFX.wormhole'
-	Skin=Texture'GenFX.LensFlar.3'
-	RotationRate=(Roll=4096)
-	RemoteRole=ROLE_SimulatedProxy
-	Style=STY_Translucent
-	AmbientGlow=254
-	LightType=LT_Steady
-	LightEffect=LE_WateryShimmer
-	LightHue=140
-	LightSaturation=255
-	LightRadius=64
-	bUnlit=True
-	bAlwaysRelevant=True
-	bCollideActors=True
-	bCollideWorld=True
-	bCorona=True
+				bEnabled=True
+				ScoreAmount=150
+				bUnlit=True
+				bAlwaysRelevant=True
+				bCollideActors=True
+				bCollideWorld=True
+				bCorona=True
+				RemoteRole=ROLE_SimulatedProxy
+				LifeSpan=99999.000000
+				Style=STY_Translucent
+				Texture=WetTexture'SpaceFX.wormhole'
+				Skin=Texture'GenFX.LensFlar.3'
+				DrawScale=0.500000
+				ScaleGlow=2.000000
+				AmbientGlow=254
+				LightType=LT_Steady
+				LightEffect=LE_WateryShimmer
+				LightHue=140
+				LightSaturation=255
+				LightRadius=64
+				RotationRate=(Roll=4096)
 }

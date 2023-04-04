@@ -5,5 +5,5 @@ class wPlayerStart extends PlayerStart;
 
 defaultproperties
 {
-	bStatic=False
+				bStatic=False
 }

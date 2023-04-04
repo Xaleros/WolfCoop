@@ -17,6 +17,7 @@ var Pawn LastDamageTarget;
 var array<Inventory> CollectedItems;
 
 var rotator CamSpeedDif;
+
 var bool bFPBody;
 
 var(FPBody) int AttachVert;
@@ -44,7 +45,6 @@ simulated function PostBeginPlay()
 	SpeechTime=0.000001;
 	SetTimer(1,True,'AFKChecker');
 	PRI=wPRI(PlayerReplicationInfo);
-    CurrentSize = 1;
 }
 
 function DrainRespawnImmunity()
@@ -186,11 +186,7 @@ function PlayCrawling()
 }
 
 simulated function Destroyed()
-{
-	if(bool(Respawner)) 
-		Respawner.Destroy(); 
-	Super.Destroyed();
-}
+{if(bool(Respawner)) Respawner.Destroy(); Super.Destroyed();}
 
 simulated state PlayerWalking
 {
@@ -337,6 +333,7 @@ simulated state PlayerWalking
 	function ProcessMove(float DeltaTime, vector NewAccel, eDodgeDir DodgeMove, rotator DeltaRot)
 	{
 		local vector OldAccel;
+		local vector X,Y,Z, Dir;
 
 		OldAccel = Acceleration;
 		Acceleration = NewAccel;
@@ -589,10 +586,7 @@ simulated event PlayerTick(float dT)
 
 
 simulated function Landed(vector HitNormal)
-{ 
-	LandedSpeedDif=-Velocity.Z*2; 
-	Super.Landed(HitNormal); 
-}
+{ LandedSpeedDif=-Velocity.Z*2; Super.Landed(HitNormal); }
 
 state PlayerFlying
 {
@@ -633,9 +627,7 @@ simulated event PostRender(Canvas C)
 {
 	if(HitMarkerTime>0.04)
 	{
-		if(Health<=0) 
-			HitMarkerTime=0;
-
+		if(Health<=0) HitMarkerTime=0;
 		C.bNoSmooth=False;
 		C.Style=3;
 		if(HitMarkerHS||HitMarkerKill)
@@ -687,17 +679,14 @@ simulated function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation
 			bShielded=True;
 		}
 		if(DamageType=='Hacked' || DamageType=='Fell' || InstigatedBy==None || InstigatedBy==Self)
-			ClientShowHit(FMin(Damage/20.f,5)*Normal(vect(-50,0,0)>>ViewRotation),DamageType,bShielded);
+		{ClientShowHit(FMin(Damage/20.f,5)*Normal(vect(-50,0,0)>>ViewRotation),DamageType,bShielded);}
 		else
-			ClientShowHit(FMin(Damage/20.f,5)*Normal(HitLocation-Location),DamageType,bShielded);
+		ClientShowHit(FMin(Damage/20.f,5)*Normal(HitLocation-Location),DamageType,bShielded);
 	}
 
 	if(RespawnImmunity>0) Damage=0;
 	if(bGodMode || (bBuddha && Health<=1))
-	{
-		ReducedDamageType='All'; 
-		Damage=0;
-	}
+	{ReducedDamageType='All'; Damage=0;}
 
 	if(DamageType=='Drowned' && HeadRegion.Zone.bWaterZone) DrownHP+=Damage;
 
@@ -705,12 +694,7 @@ simulated function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation
 }
 
 simulated event EncroachedBy( actor Other )
-{
-	if(wPlayer(Other)!=None) 
-		return;
-
-	Super.EncroachedBy(Other);
-}
+{if(wPlayer(Other)!=None) return; else Super.EncroachedBy(Other);}
 
 simulated function Died(pawn Killer, name damageType, vector HitLocation)
 {
@@ -768,43 +752,25 @@ simulated function rotator AdjustAim(float projSpeed, vector projStart, int aime
 }
 
 exec function AdminLogin(string AdminPw)
-{
-	if(LoginAttempts>=3) 
-		return; 
-	
-	wAAM(Level.Game.GetAccessManager()).wAdminLogin(Self,AdminPw); 
-	if(wPRI(PlayerReplicationInfo).AdminLevel<=0) 
-	{
-		LoginAttempts++; 
-		ClientMessage("Incorrect password,"@3-LoginAttempts@"login attempts left");
-	}
-}
+{if(LoginAttempts>=3) return; else wAAM(Level.Game.GetAccessManager()).wAdminLogin(Self,AdminPw); if(wPRI(PlayerReplicationInfo).AdminLevel<=0) {LoginAttempts++; ClientMessage("Incorrect password,"@3-LoginAttempts@"login attempts left");}}
 
 exec function Login(string AdminPw)
-{
-	AdminLogin(AdminPw);
-}
+{AdminLogin(AdminPw);}
 
 exec function GrantAdmin(int PawnID,int AdminLevel)
 {
 	local PlayerPawn P;
 	local string AdminText;
-	if(AdminLevel>=wPRI(PlayerReplicationInfo).AdminLevel) 
-		return;
-
-	if(AdminLevel==1) 
-		AdminText="Helper";
-	else if(AdminLevel==2) 
-		AdminText="Moderator";
-
-	if(PawnID>0)
-	{	
-		Foreach allactors(class'PlayerPawn', P)
-		{	
-			if (PawnID == P.PlayerReplicationInfo.PlayerID)
-			{
-				wPRI(P.PlayerReplicationInfo).AdminLevel=AdminLevel;
-				BroadCastMessage(GetHumanName()$"granted "$P.GetHumanName()@AdminText$" commands access");
+	if(AdminLevel>=wPRI(PlayerReplicationInfo).AdminLevel) return;
+	else
+	{
+		if(AdminLevel==1) AdminText="Helper";
+		else if(AdminLevel==2) AdminText="Moderator";
+		if(PawnID>0)
+		{	Foreach allactors(class'PlayerPawn', P)
+			{	if (PawnID == P.PlayerReplicationInfo.PlayerID)
+				{wPRI(P.PlayerReplicationInfo).AdminLevel=AdminLevel;
+				BroadCastMessage(GetHumanName()$"granted "$P.GetHumanName()@AdminText$" commands access");}
 			}
 		}
 	}
@@ -820,9 +786,8 @@ simulated function CalcBehindView(out vector CameraLocation, out rotator CameraR
 		if(bFPBody)
 		{		
 			if(AttachVert==0)
-				AttachVert=Self.GetClosestVertex(Self.Location+(Self.CollisionHeight*vect(0,0,2)>>Self.Rotation),NewLoc);
-			else 
-				NewLoc=Self.GetVertexPos(AttachVert,true);
+			AttachVert=Self.GetClosestVertex(Self.Location+(Self.CollisionHeight*vect(0,0,2)>>Self.Rotation),NewLoc);
+			else NewLoc=Self.GetVertexPos(AttachVert,true);
 			CameraLocation=NewLoc+(FPBodyAdjustment>>Rotation);
 			CameraRotation=ViewRotation;
 		}
@@ -833,11 +798,11 @@ simulated function CalcBehindView(out vector CameraLocation, out rotator CameraR
 			CameraRotation = ViewRotation;
 
 			if(Handedness>0)
-				View=vect(-1,-0.4,0.45)*(vect(1,0,1)+(Handedness*vect(0,1,0)));
+			View=vect(-1,-0.4,0.45)*(vect(1,0,1)+(Handedness*vect(0,1,0)));
 			else if (Handedness<0)
-				View=vect(-1, 0.4,0.45)*(vect(1,0,1)+(Handedness*vect(0,-1,0)));
+			View=vect(-1, 0.4,0.45)*(vect(1,0,1)+(Handedness*vect(0,-1,0)));
 			else
-				View=vect(-0.9,0.2,0.45);
+			View=vect(-0.9,0.2,0.45);
 
 			CameraLocation+=GetExtent()*View>>CameraRotation;
 			CameraLocation+=GetExtent()*View*vect(-0.5,0,0)>>Rotation;
@@ -852,7 +817,7 @@ simulated function CalcBehindView(out vector CameraLocation, out rotator CameraR
 simulated function RespawnMe()
 {
 	local Effects Ef;
-    
+
 	if(Health<=0)
 	{
 		if(Lives<=0) Lives=1;
@@ -878,10 +843,7 @@ simulated function RespawnMe()
 		RespawnImmunity=5;
 		SetTimer(1,False,'DrainRespawnImmunity');
 		SwitchToBestWeapon();
-	}else{
-
-    }
-
+	}
 }
 
 exec function CheckPoint()
@@ -934,44 +896,15 @@ simulated function ServerReStartPlayer()
 	if(Lives==1)
 	ClientMessage("Last Life Left!",'RedCriticalEvent');
 	if(Lives<=0) Lives=1;
-	
-    if(CurrentSize!=1)
-    {
-    //log("size block  yyrt = " $ CurrentSize);
-    SetCollisionSize(Default.CollisionRadius*CurrentSize,Default.CollisionHeight*CurrentSize);
-	}else{
-    //log("tyest yyrt = " $ CurrentSize);
-    SetCollisionSize(Default.CollisionRadius,Default.CollisionHeight);
-	SetCollision(True,True,True);
-    }
-
-Super.ServerRestartPlayer();
-
-	if(Respawner!=None)
-      {
-       Respawner.Destroy();
-	   Respawner=None;
-      }
+	Super.ServerRestartPlayer();
+	Respawner.Destroy();
+	Respawner=None;
 	Ef=Spawn( class 'ReSpawn',,,Location );
-    if(Ef!=None)   {Ef.DrawScale*=DrawScale;};
+	Ef.DrawScale*=DrawScale;
 	RespawnImmunity=5;
 	SetTimer(1,False,'DrainRespawnImmunity');
 	SwitchToBestWeapon();
-
-
-
-    //ViewTarget=None;
-	//bBehindView=False;
-	//RespawnImmunity=5;
-	//SetTimer(1,False,'DrainRespawnImmunity');
-    //GoToState('PlayerWalking');
-	// would be better to save the old held gun as a value and switch back seemlessly?
-    //SwitchToBestWeapon();
-
-
-
 }
-
 
 State Dying
 {
@@ -1522,7 +1455,7 @@ exec function SkipMap()
 	BroadcastMessage("Level has been skipped to the next map",true,'CriticalEvent');			
 	Log("Level has been skipped to: "$dest,'LOG_WATERMARK');
 	
-	Level.ServerTravel(dest,true);
+	Level.ServerTravel(dest,False);
 }
 
 exec function RestartMap()
@@ -1615,43 +1548,25 @@ final simulated function ClientShowHit(vector HitLoc, name DamageType, bool bShi
 exec function PSay(int PawnID, string Msg)
 {
 	local PlayerPawn P;
+	local int I;
 	local GameRules GR;
-    local wChatRules wc;
-    local string holdh;
 
-
-    holdh = "(Psay) " $  Msg;  // add somthing in the message to declare it as private to mods.
-    foreach allactors(class'wChatRules',wc)
-	{ // 
-      if (wc.PSayThruGameRules)
-         {
-           foreach allactors(class'GameRules',GR)
-	       {
-              if(GR.bNotifyMessages && !GR.AllowChat(Self,holdh)) return;
-	       }
-         }
-    }
-
+	foreach allactors(class'GameRules',GR)
+	{
+		if(GR.bNotifyMessages && !GR.AllowChat(Self,Msg)) return;
+	}
 
 	if(PawnID>=0)
 	{
-     
 		Foreach allactors(class'PlayerPawn', P)
 		{
 			if (PawnID == P.PlayerReplicationInfo.PlayerID)
 			{
-            ClientMessage("(PSay) You -->"@P.PlayerReplicationInfo.PlayerName$":"@Msg,,true);
-			P.ClientMessage("(PSay) "@PlayerReplicationInfo.PlayerName@"--> You:"@Msg,,true);
+				ClientMessage("(PSay) You -->"@P.PlayerReplicationInfo.PlayerName$":"@Msg,,true);
+				P.ClientMessage("(PSay)"@PlayerReplicationInfo.PlayerName@"--> You:"@Msg,,true);
 			}
 		}
-
-        if (PawnID == 1800)
-        {
-         ClientMessage("(PSay) You -->ServeConsole:"@Msg,,true);
-		 Log("(PSay) "@PlayerReplicationInfo.PlayerName@"(id=" @ PlayerReplicationInfo.Playerid @ ")--> You:"@Msg,'psay');
-        }
-
-    }
+	}
 }
 
 
@@ -1836,45 +1751,6 @@ exec function KillAll(class<actor> aClass)
 	if( !Level.Game.GetAccessManager().CanExecuteCheatStr(Self,'KillAll',string(aClass)) )
 		return;
 
-    // prevent from killing gamerules that proccess admin commands
-    if(InStr(caps(string(aClass)),caps("wChatRules"))!=-1)
-	{
-    return;
-    }
-    
-    // prevent from killing via root gamerules 
-    if(InStr(string(aClass),caps("gamerules"))!=-1)
-	{
-        ForEach AllActors(class 'Actor', A)
-         {
-	      if ( ClassIsChildOf(A.class, aClass) )
-           {
-               if (caps(A.class) != caps("wChatRules"))
-               {
-                A.Destroy();
-               log("killing"$caps(A.class));
-               }else{
-               log (" attempt to kill wgamerule");
-               }
-           }
-	      }
-
-    }
-
-
-    // this seems unkillable, probably blocked upstream
-    // prevent from killing wAAM, you loose logging and ability to login
-    if(InStr(caps("wAAM"),caps(string(aClass)))>=0)
-	{
-    return;
-    }
-    
-    
-
-
-
-
-
 	ForEach allactors(class 'PlayerPawn', P)
 	{
 		if( Level.Game.GetAccessManager().CanExecuteCheat(P,'God') )
@@ -1897,6 +1773,8 @@ exec function PlayersOnly()
 event TeamMessage(PlayerReplicationInfo PRI, coerce string S, name Type)
 {
 	local string TimeString;
+	local int I;	
+
 
 	TimeString="["; if(Level.Hour<10) TimeString=TimeString$"0"; TimeString=TimeString$Level.Hour$":";
 	if(Level.Minute<10) TimeString=TimeString$"0"; TimeString=TimeString$Level.Minute$"]"; S=TimeString@S;
@@ -2020,29 +1898,13 @@ exec function Help()
 exec function Summon( string ClassName )
 {
 	local class<actor> NewClass;
-	local string OriginalClass,templ;
-    local wObjectCompleter oc,targetoc;
+	local string OriginalClass;
 
 	if( !Level.Game.GetAccessManager().CanExecuteCheatStr(Self,'Summon',ClassName) )
 		return;
-
 	OriginalClass = ClassName;
-    // use a fancy lookup table
-    foreach allactors(class'wObjectCompleter',oc)
-    { 
-        if (oc != none){targetoc = oc;};
-    }
-
 	if ( InStr(ClassName,".")==-1 )
-	{ 
-		templ = targetoc.returnmatchingfile(Classname)$"." $ ClassName;
-		log(templ);
-		if ( InStr(templ,"broken")==-1 )
-		{ 
-			classname = templ;
-		}
-	}
-        
+		ClassName = "UnrealI."$ClassName;
 	log( "Fabricate " $ ClassName );
 	NewClass = class<actor>( DynamicLoadObject( ClassName, class'Class',True) );
 	if ( NewClass!=None )
@@ -2056,8 +1918,37 @@ exec function Summon( string ClassName )
 	}
 	else
 	{
-		ClientMessage("Unable to load class" @ OriginalClass);
-    }
+		if ( InStr(OriginalClass,".")==-1 )
+		ClassName = "WolfCoop."$OriginalClass;
+		log( "Fabricate " $ ClassName );
+		NewClass = class<actor>( DynamicLoadObject( ClassName, class'Class',True) );
+		if ( NewClass!=None )
+		{
+			if ( NewClass.Default.bStatic )
+				ClientMessage("Cannot spawn a bStatic actor" @ NewClass);
+			else if ( NewClass.Default.bNoDelete )
+				ClientMessage("Cannot spawn a bNoDelete actor" @ NewClass);
+			else if ( Spawn( NewClass,,,Location + (40+NewClass.Default.CollisionRadius) * Vector(Rotation) + vect(0,0,1) * 15,ViewRotation)==None )
+				ClientMessage("Failed to spawn an actor" @ NewClass);
+		}
+		else
+		{
+			if ( InStr(OriginalClass,".")==-1 )
+			ClassName = "Upak."$OriginalClass;
+			log( "Fabricate " $ ClassName );
+			NewClass = class<actor>( DynamicLoadObject( ClassName, class'Class',True) );
+			if ( NewClass!=None )
+			{
+				if ( NewClass.Default.bStatic )
+					ClientMessage("Cannot spawn a bStatic actor" @ NewClass);
+				else if ( NewClass.Default.bNoDelete )
+					ClientMessage("Cannot spawn a bNoDelete actor" @ NewClass);
+				else if ( Spawn( NewClass,,,Location + (40+NewClass.Default.CollisionRadius) * Vector(Rotation) + vect(0,0,1) * 15,ViewRotation)==None )
+					ClientMessage("Failed to spawn an actor" @ NewClass);
+			}
+			else ClientMessage("Unable to load class" @ OriginalClass);
+		}
+	}
 }
 
 simulated function PlayHitMarker(name DamageType, optional bool bKillMarker)
@@ -2074,84 +1965,49 @@ simulated function PlayHitMarker(name DamageType, optional bool bKillMarker)
 		HitMarkerHS=False;
 		HitMarkerKill=False;
 		HitMarkerTime=1;
-		if (DamageType=='Decapitated')
+		if(DamageType=='Decapitated')
 		{
 			ClientPlaySound(Sound'AmbAncient.TileHit4');
 			HitMarkerHS=True;
 		}
 		else
-			ClientPlaySound(Sound'AmbAncient.TileHit3');
+		ClientPlaySound(Sound'AmbAncient.TileHit3');
 	}
 }
 
 defaultproperties
 {
-	AFKCheck=0
-	LoginAttempts=0
-	RespawnImmunity=0
-	LastDamageAmount=0
-	CheckPointTime=0
-	DrownHP=0
-	Lives=0
-	Score=0
-	AttachVert=0
-	LastSaveTime=0.0
-	LandedSpeedDif=0.0
-	HitMarkerTime=0.0
-	LastDamageTick=0.0
-	ReviveProgress=0.0
-	CurrentSize=1.0
-	ReviveTarget=None
-	PRI=None
-	Respawner=None
-	LastDamageTarget=None
-	LastSaveLocation=(X=0.0,Y=0.0,Z=0.0)
-	CamSpeedDif=(Pitch=0,Yaw=0,Roll=0)
-	FPBodyAdjustment=(X=0.0,Y=0.0,Z=0.0)
-	bGodMode=False
-	bBuddha=False
-	HitMarkerHS=False
-	HitMarkerKill=False
-	bGhost=False
-	bAFK=False
-	bForcedAFK=False
-	RepTyping=False
-	bForcedCrouch=False
-	bGreenBlood=False
-	bInvaderClass=False
-	bFPBody=False
-	Bob=0.004
-	WeaponPriority(0)="DispersionPistol"
-	WeaponPriority(1)="thecrimsonking"
-	WeaponPriority(2)="U96AutoMag"
-	WeaponPriority(3)="RLBow"
-	WeaponPriority(4)="ShockRifle"
-	WeaponPriority(5)="K_bow"
-	WeaponPriority(6)="Eightball"
-	WeaponPriority(7)="FlakCannon"
-	WeaponPriority(8)="QuadShot"
-	WeaponPriority(9)="CS_M4A1"
-	WeaponPriority(10)="GESBioRifle"
-	WeaponPriority(11)="CARifle"
-	WeaponPriority(12)="ASMD"
-	WeaponPriority(13)="Minigun"
-	WeaponPriority(14)="Stinger"
-	WeaponPriority(15)="K_Fists"
-	WeaponPriority(16)="crystalstaff"
-	WeaponPriority(17)="ucombatshotgun"
-	WeaponPriority(18)="MyAutomag"
-	WeaponPriority(19)="EARifle"
-	WeaponPriority(20)="RazorJack"
-	WeaponPriority(21)="AutoMag"
-	WeaponPriority(22)="Rifle"
-	WeaponPriority(23)="MadnessSword"
-	WeaponPriority(24)="rlburstsmg"
-	WeaponPriority(25)="MadnessMag"
-	WeaponPriority(26)="rlbquadshot"
-	WeaponPriority(27)="RLRevolver"
-	WeaponPriority(28)="RLAutomag"
-	Password="AdminPassword"
-	bMessageBeep=False
-	PlayerReplicationInfoClass=Class'WolfCoop.wPRI'
-	bAlwaysRelevant=True
+				CurrentSize=1.000000
+				Password="AdminPassword"
+				Bob=0.004000
+				WeaponPriority(1)="thecrimsonking"
+				WeaponPriority(2)="U96AutoMag"
+				WeaponPriority(3)="RLBow"
+				WeaponPriority(4)="ShockRifle"
+				WeaponPriority(5)="K_bow"
+				WeaponPriority(6)="Eightball"
+				WeaponPriority(7)="FlakCannon"
+				WeaponPriority(8)="QuadShot"
+				WeaponPriority(9)="CS_M4A1"
+				WeaponPriority(10)="GESBioRifle"
+				WeaponPriority(11)="CARifle"
+				WeaponPriority(12)="ASMD"
+				WeaponPriority(13)="Minigun"
+				WeaponPriority(14)="Stinger"
+				WeaponPriority(15)="K_Fists"
+				WeaponPriority(16)="crystalstaff"
+				WeaponPriority(17)="ucombatshotgun"
+				WeaponPriority(18)="MyAutomag"
+				WeaponPriority(19)="EARifle"
+				WeaponPriority(20)="RazorJack"
+				WeaponPriority(21)="AutoMag"
+				WeaponPriority(22)="Rifle"
+				WeaponPriority(23)="MadnessSword"
+				WeaponPriority(24)="rlburstsmg"
+				WeaponPriority(25)="MadnessMag"
+				WeaponPriority(26)="rlbquadshot"
+				WeaponPriority(27)="RLRevolver"
+				WeaponPriority(28)="RLAutomag"
+				PlayerReplicationInfoClass=Class'WolfCoop.wPRI'
+				bAlwaysRelevant=True
 }

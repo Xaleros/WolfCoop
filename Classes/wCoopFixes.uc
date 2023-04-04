@@ -5,8 +5,8 @@ class wCoopFixes extends Mutator;
 
 function PostBeginPlay()
 {
-	FixCoopMaps();
 	log("Appling Mapfixes..",stringtoname("WolfCoop(coopfixes)"));
+	FixCoopMaps();
 }
 
 function FixCoopMaps()
@@ -211,7 +211,7 @@ function FixCoopMaps()
 		}
 		
 		if(Level.NetMode!=NM_Standalone)
-		Spawn(class'wPlayerStart',,,vect(-1784.812134,-221.392105,963.897583));
+			Spawn(class'wPlayerStart',,,vect(-1784.812134,-221.392105,963.897583));
 		else
 		{
 			ForEach AllActors(class'PlayerPawn',Pp)

@@ -28,14 +28,14 @@ function Tick(float DT)
 
 defaultproperties
 {
-	ScaleGlow=0.5
-	CollisionRadius=0.0
-	CollisionHeight=0.0
-	Mesh=LodMesh'UnrealShare.ArmorM'
-	RotationRate=(Yaw=5000)
-	DesiredRotation=(Yaw=30000)
-	DrawType=DT_Mesh
-	Style=STY_Translucent
-	bUnlit=True
-	bFixedRotationDir=True
+				bUnlit=True
+				bFixedRotationDir=True
+				DrawType=DT_Mesh
+				Style=STY_Translucent
+				Mesh=LodMesh'UnrealShare.ArmorM'
+				ScaleGlow=0.500000
+				CollisionRadius=0.000000
+				CollisionHeight=0.000000
+				RotationRate=(Yaw=5000)
+				DesiredRotation=(Yaw=30000)
 }

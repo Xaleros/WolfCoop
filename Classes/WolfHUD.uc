@@ -22,9 +22,9 @@ simulated function PostBeginPlay()
 simulated function PostRender(canvas Canvas)
 {
 	local float fVal;
-	//local string S;
-	//local int Hours, Minutes, Seconds;
-	//local string MinuteString, SecondString;
+	local string S;
+	local int Hours, Minutes, Seconds;
+	local string MinuteString, SecondString;
 
 
 	HUDSetup(canvas);
@@ -246,11 +246,10 @@ simulated function DrawMOTD(Canvas C)
 
 simulated function DrawDeathPanels(Canvas C)
 {
-/*
 	local vector CamSize;
 	local int I;
 	
-	if(RLSpectator(Owner)!=None && RLSpectator(Owner).bBeingAllowed) return;
+/*	if(RLSpectator(Owner)!=None && RLSpectator(Owner).bBeingAllowed) return;
 
 	C.SetPos(0,0);
 	C.DrawRect(Texture'BlackTexture',C.ClipX,C.ClipY);
@@ -294,8 +293,7 @@ simulated function DrawDeathPanels(Canvas C)
 			DrawPlayerHUD(C, CamSize.X*I, 0, CamSize.X, CamSize.Y, P);
 		}
 		else DrawPlayerHUD(C, 0,0, C.ClipX,C.ClipY, P);
-	}
-*/
+	}*/
 }
 
 simulated function DrawGameOver(Canvas C)
@@ -764,8 +762,8 @@ simulated function bool DisplayMessages( canvas Canvas )
 	local int I, J, J2, J3, J4, YPos;
 	local float PickupColor,PickupMessageTick[12],RedMessageTick[12];
 	local console Console;
-	local MessageStruct ShortMessages[12], /*PickupMessages[4], CriticalMessage[4],*/ FuckUSweeny;
-	local string MessageString[12]; /*PickupMessageStrings[4], CriticalMessageStrings[4];*/
+	local MessageStruct ShortMessages[12], PickupMessages[4], CriticalMessage[4], FuckUSweeny;
+	local string MessageString[12], PickupMessageStrings[4], CriticalMessageStrings[4];
 	local name MsgType;
 	local color SaveColor;
 
@@ -839,17 +837,17 @@ simulated function bool DisplayMessages( canvas Canvas )
 			}
 			if ( !SpecialType(ShortMessages[11 - I].Type) )
 			{
-				if (ShortMessages[11 - I].PRI!=None) {
+				if(ShortMessages[11 - I].PRI!=None)
+				{
 					if(ShortMessages[11-I].PRI.bIsSpectator)
 					Canvas.StrLen(ShortMessages[11 - I].PRI.PlayerName$":(Spectating) "$MessageString[11-I],XL,YL);
 					else if(Pawn(ShortMessages[11-I].PRI.Owner).Health<=0)
 					Canvas.StrLen(ShortMessages[11 - I].PRI.PlayerName$":(Dead) "$MessageString[11-I],XL,YL);
 					else
 					Canvas.StrLen(ShortMessages[11 - I].PRI.PlayerName$": "$MessageString[11-I],XL,YL);
-				} else {
-					Canvas.StrLen(MessageString[11-I],XL,YL);
 				}
-
+				else
+				Canvas.StrLen(MessageString[11-I],XL,YL);
 				Canvas.Style=4;
 				SaveColor=Canvas.DrawColor;
 				Canvas.DrawColor=MakeColor(255,255,255,255);
@@ -858,11 +856,12 @@ simulated function bool DisplayMessages( canvas Canvas )
 				Canvas.DrawRect(Texture'ModulatedIcon',XL+2,YL);
 				Canvas.DrawColor=SaveColor;
 				Canvas.Style=1;
-				if (ShortMessages[11 - I].Type!='Say'&&ShortMessages[11 - I].Type!='TeamSay') {
+				if(ShortMessages[11 - I].Type!='Say'&&ShortMessages[11 - I].Type!='TeamSay')
+				{
 					Canvas.SetPos(0,YPos);
-					Canvas.DrawText(MessageString[11-I], false );
-				} else {
-					Canvas.SetPos(SaveX,YPos);
+					Canvas.DrawText(MessageString[11-I], false );}
+					else
+					{Canvas.SetPos(SaveX,YPos);
 					Canvas.DrawText(MessageString[11-I], false );
 					Canvas.SetPos(0,YPos);
 					FuckUSweeny=ShortMessages[11-I];
@@ -986,7 +985,7 @@ simulated function bool DrawMessageHeader(Canvas Canvas, MessageStruct ShortMess
 			XOffset = DrawNextMessagePart(Canvas, ShortMessage.PRI.PlayerName$": ", XOffset, YPos);
 	}
 	else
-		XOffset = DrawNextMessagePart(Canvas, SomeoneName$": ", XOffset, YPos);
+	XOffset = DrawNextMessagePart(Canvas, SomeoneName$": ", XOffset, YPos);
 	Canvas.SetPos( XOffset, YPos);
 	//Canvas.SetPos(4 + XOffset,Canvas.ClipY/2);
 
@@ -1156,16 +1155,15 @@ simulated function DrawHits(Canvas C)
 		}
 		else
 		{	if(HitShielded[I]>0)
-				C.DrawColor=MakeColor(128*fVal,192*fVal,255*fVal);
+			C.DrawColor=MakeColor(128*fVal,192*fVal,255*fVal);
 			else if(HitType[I]=='Corroded')
-				C.DrawColor=MakeColor(0,255*fVal,0);
+			C.DrawColor=MakeColor(0,255*fVal,0);
 			else if(HitType[I]=='Burned')
-				C.DrawColor=MakeColor(255*fVal,128*fVal,0);
+			C.DrawColor=MakeColor(255*fVal,128*fVal,0);
 			else if(HitType[I]=='Jolted')
-				C.DrawColor=MakeColor(128*fVal,128*fVal,255*fVal);
+			C.DrawColor=MakeColor(128*fVal,128*fVal,255*fVal);
 			else
-				C.DrawColor=MakeColor(255*fVal,0,0);
-
+			C.DrawColor=MakeColor(255*fVal,0,0);
 			C.SetPos(C.ClipX/2-80*Scale,C.ClipY/2-(208-16*fVal)*Scale);
 			C.DrawRect(Texture'HitIndicator',192*Scale,96*Scale);
 		}
@@ -1483,6 +1481,4 @@ simulated function DrawTypingPrompt(Canvas C, Console Console)
 
 defaultproperties
 {
-	DeathTime=0.0
-	CurrentLevel=None
 }

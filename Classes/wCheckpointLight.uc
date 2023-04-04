@@ -7,14 +7,14 @@ function tick (float DT)
 {
 	Super.tick(DT);
 	if(!bool(Owner))
-		Destroy();
+	Destroy();
 }
 
 defaultproperties
 {
-	LightEffect=LE_WateryShimmer
-	LightBrightness=255
-	LightHue=140
-	LightSaturation=255
-	LightRadius=24
+				LightEffect=LE_WateryShimmer
+				LightBrightness=255
+				LightHue=140
+				LightSaturation=255
+				LightRadius=24
 }

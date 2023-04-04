@@ -139,18 +139,17 @@ simulated function Touch(Actor Other)
 
 defaultproperties
 {
-	bReviving=False
-	LifeSpan=99999.0
-	ScaleGlow=2.0
-	CollisionRadius=17.0
-	CollisionHeight=39.0
-	Mass=1.0
-	Mesh=LodMesh'UnrealShare.Female1'
-	AnimSequence="GutHit"
-	RemoteRole=ROLE_SimulatedProxy
-	DrawType=DT_Mesh
-	Style=STY_Translucent
-	AmbientGlow=255
-	bAlwaysRelevant=True
-	bCollideActors=True
+				bAlwaysRelevant=True
+				bCollideActors=True
+				RemoteRole=ROLE_SimulatedProxy
+				LifeSpan=99999.000000
+				AnimSequence="GutHit"
+				DrawType=DT_Mesh
+				Style=STY_Translucent
+				Mesh=LodMesh'UnrealShare.Female1'
+				ScaleGlow=2.000000
+				AmbientGlow=255
+				CollisionRadius=17.000000
+				CollisionHeight=39.000000
+				Mass=1.000000
 }

@@ -33,6 +33,6 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-	DrawType=DT_Mesh
-	bAlwaysRelevant=True
+				bAlwaysRelevant=True
+				DrawType=DT_Mesh
 }

@@ -8,9 +8,9 @@ function PlayTurning()
 {
 	BaseEyeHeight = Default.BaseEyeHeight;
 	if(Weapon!=None&&Weapon.bPointing)
-		PlayAnim('WalkFire',0.3,0.3);
+	PlayAnim('WalkFire',0.3,0.3);
 	else
-		PlayAnim('Turn', 0.3, 0.3);
+	PlayAnim('Turn', 0.3, 0.3);
 }
 
 function TweenToWalking(float tweentime)
@@ -436,36 +436,35 @@ Begin:
 
 defaultproperties
 {
-	CurrentSize=0.0
-	drown=Sound'UnrealShare.Male.MDrown1'
-	breathagain=Sound'UnrealShare.Male.MGasp1'
-	Footstep1=Sound'UnrealShare.Cow.walkC'
-	Footstep2=Sound'UnrealShare.Cow.walkC'
-	Footstep3=Sound'UnrealShare.Cow.walkC'
-	HitSound3=Sound'UnrealShare.Nali.injur1n'
-	HitSound4=Sound'UnrealShare.Nali.injur2n'
-	Die2=Sound'UnrealShare.Nali.death2n'
-	Die3=Sound'UnrealShare.Nali.death2n'
-	Die4=Sound'UnrealShare.Nali.death2n'
-	GaspSound=Sound'UnrealShare.Male.MGasp2'
-	UWHit1=Sound'UnrealShare.Male.MUWHit1'
-	UWHit2=Sound'UnrealShare.Male.MUWHit2'
-	LandGrunt=Sound'UnrealShare.Male.lland01'
-	JumpSound=Sound'UnrealShare.Male.MJump1'
-	CarcassType=Class'UnrealShare.NaliCarcass'
-	bSinglePlayer=False
-	Health=80
-	GroundSpeed=320.0
-	JumpZ=360.0
-	BaseEyeHeight=32.0
-	EyeHeight=32.0
-	HitSound1=Sound'UnrealShare.Nali.fear1n'
-	HitSound2=Sound'UnrealShare.Nali.cringe2n'
-	Die=Sound'UnrealShare.Nali.death1n'
-	MenuName="Nali"
-	CollisionRadius=24.0
-	CollisionHeight=48.0
-	Buoyancy=98.0
-	Skin=Texture'UnrealShare.Skins.JNali1'
-	Mesh=LodMesh'UnrealI.Nali2'
+				drown=Sound'UnrealShare.Male.MDrown1'
+				breathagain=Sound'UnrealShare.Male.MGasp1'
+				Footstep1=Sound'UnrealShare.Cow.walkC'
+				Footstep2=Sound'UnrealShare.Cow.walkC'
+				Footstep3=Sound'UnrealShare.Cow.walkC'
+				HitSound3=Sound'UnrealShare.Nali.injur1n'
+				HitSound4=Sound'UnrealShare.Nali.injur2n'
+				Die2=Sound'UnrealShare.Nali.death2n'
+				Die3=Sound'UnrealShare.Nali.death2n'
+				Die4=Sound'UnrealShare.Nali.death2n'
+				GaspSound=Sound'UnrealShare.Male.MGasp2'
+				UWHit1=Sound'UnrealShare.Male.MUWHit1'
+				UWHit2=Sound'UnrealShare.Male.MUWHit2'
+				LandGrunt=Sound'UnrealShare.Male.lland01'
+				CarcassType=Class'UnrealShare.NaliCarcass'
+				JumpSound=Sound'UnrealShare.Male.MJump1'
+				bSinglePlayer=False
+				GroundSpeed=320.000000
+				JumpZ=360.000000
+				BaseEyeHeight=32.000000
+				EyeHeight=32.000000
+				Health=80
+				HitSound1=Sound'UnrealShare.Nali.fear1n'
+				HitSound2=Sound'UnrealShare.Nali.cringe2n'
+				Die=Sound'UnrealShare.Nali.death1n'
+				MenuName="Nali"
+				Skin=Texture'UnrealShare.Skins.JNali1'
+				Mesh=LodMesh'UnrealI.Nali2'
+				CollisionRadius=24.000000
+				CollisionHeight=48.000000
+				Buoyancy=98.000000
 }
