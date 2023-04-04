@@ -192,3 +192,11 @@ defaultproperties
         prohibitedPackageNames[10]="IpDrv"
         prohibitedPackageNames[11]="MapBuilder"
         prohibitedPackageNames[12]="ssf"
+        prohibitedPackageNames[13]="mcoop"
+        prohibitedPackageNames[14]="zssp"
+        prohibitedPackageNames[15]="ServerLogger"
+        prohibitedPackageNames[16]="WinampAPI"
+        prohibitedPackageNames[17]="zelda"
+        prohibitedPackageNames[18]="TSReporter"
+}
+
